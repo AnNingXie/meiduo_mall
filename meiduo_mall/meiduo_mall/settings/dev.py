@@ -11,11 +11,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-_brr#3n7c+i=)k)ksh8+g#j32-l6h55jzawa#9m5!^p6$o1u)e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# 开发者模式,上线之后改为False
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -55,7 +56,7 @@ ROOT_URLCONF = "meiduo_mall.urls"
 TEMPLATES = [
     # {
     #     "BACKEND": "django.template.backends.django.DjangoTemplates",
-    #     "DIRS": [],
+    #     "DIRS": [os.path.join(BASE_DIR, 'templates')],
     #     "APP_DIRS": True,
     #     "OPTIONS": {
     #         "context_processors": [
@@ -67,9 +68,8 @@ TEMPLATES = [
     #     },
     # },
     {
-        # 配置Jinja2模板引擎
-        "BACKEND": "django.template.backends.jinja2.Jinja2",
-        "DIRS": [],
+        "BACKEND": "django.template.backends.jinja2.Jinja2", # 配置Jinja2模版引擎
+        "DIRS": [os.path.join(BASE_DIR, 'templates')], # 配置模版文件加载的路径
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,8 +78,13 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            
+            # 补充jinja2模版引擎环境
+            'environment': 'meiduo_mall.utils.jinja2_env.jinja2_environment'
         },
-    },
+
+},
+    
 ]
 
 WSGI_APPLICATION = "meiduo_mall.wsgi.application"
@@ -88,12 +93,44 @@ WSGI_APPLICATION = "meiduo_mall.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# 配置网络数据库
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
+    # 修改数据库为mysql
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql", # 数据库引擎
+        "HOST": '39.98.194.30', # 数据库主机
+        "PORT": 3306,   # 数据库端口
+        "USER": 'xieanning',    # 数据库用户名
+        "PASSWORD": '123456',   # 数据库密码
+        "NAME": 'meiduo_mall'   # 数据库名字
     }
 }
+
+# 配置缓存数据库--redis数据库
+CACHES = {
+    "default": {    # 默认缓存到0号库
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://39.98.194.30:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    },
+     "session": {   # session缓存到1号库
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://39.98.194.30:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+
+    }
+}
+# session缓存到1号库
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "session"
 
 
 # Password validation
