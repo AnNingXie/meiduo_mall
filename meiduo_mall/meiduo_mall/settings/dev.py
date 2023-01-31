@@ -11,11 +11,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import os
+import os, sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 追加导包路径指向apps包
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'users',    # 用户模块
 ]
 
 MIDDLEWARE = [
@@ -95,19 +99,19 @@ WSGI_APPLICATION = "meiduo_mall.wsgi.application"
 
 # 配置网络数据库
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.sqlite3",
-    #     "NAME": BASE_DIR / "db.sqlite3",
-    # }
-    # 修改数据库为mysql
     "default": {
-        "ENGINE": "django.db.backends.mysql", # 数据库引擎
-        "HOST": '39.98.194.30', # 数据库主机
-        "PORT": 3306,   # 数据库端口
-        "USER": 'xieanning',    # 数据库用户名
-        "PASSWORD": '123456',   # 数据库密码
-        "NAME": 'meiduo_mall'   # 数据库名字
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
+    # 修改数据库为mysql
+    # "default": {
+    #     "ENGINE": "django.db.backends.mysql", # 数据库引擎
+    #     "HOST": '39.98.194.30', # 数据库主机
+    #     "PORT": 3306,   # 数据库端口
+    #     "USER": 'xieanning',    # 数据库用户名
+    #     "PASSWORD": '123456',   # 数据库密码
+    #     "NAME": 'meiduo_mall'   # 数据库名字
+    # }
 }
 
 # 配置缓存数据库--redis数据库
@@ -162,6 +166,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # 指定加载静态文件的路由前缀
 STATIC_URL = "static/"
+# 配置静态文件加载路径
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
