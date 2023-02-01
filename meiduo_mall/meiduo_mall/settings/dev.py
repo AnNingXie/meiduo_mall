@@ -99,19 +99,19 @@ WSGI_APPLICATION = "meiduo_mall.wsgi.application"
 
 # 配置网络数据库
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-    # 修改数据库为mysql
     # "default": {
-    #     "ENGINE": "django.db.backends.mysql", # 数据库引擎
-    #     "HOST": '39.98.194.30', # 数据库主机
-    #     "PORT": 3306,   # 数据库端口
-    #     "USER": 'xieanning',    # 数据库用户名
-    #     "PASSWORD": '123456',   # 数据库密码
-    #     "NAME": 'meiduo_mall'   # 数据库名字
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
     # }
+    # 修改数据库为mysql
+    "default": {
+        "ENGINE": "django.db.backends.mysql", # 数据库引擎
+        "HOST": '192.168.1.102', # 数据库主机
+        "PORT": 3306,   # 数据库端口
+        "USER": 'root',    # 数据库用户名
+        "PASSWORD": '123456',   # 数据库密码
+        "NAME": 'meiduo_mall'   # 数据库名字
+    }
 }
 
 # 配置缓存数据库--redis数据库
@@ -226,3 +226,8 @@ LOGGING = {
         },
     },
 }
+
+"""
+指定自定义的用户模型类,值的语法: 子应用.用户模型类
+"""
+AUTH_USER_MODEL = 'users.User'
